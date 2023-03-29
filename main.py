@@ -1,6 +1,6 @@
 import click
 from rich.progress import track
-
+from librairies.utils import WhisperFinetuner
 
 
 
@@ -13,5 +13,14 @@ def handle_command():
 def description():
     print('The project "wolof_speech2english-whisper" is focused on developing a system that can transcribe Wolof speech into English text using a whisper model. Wolof is a language spoken in Senegal, Gambia, and Mauritania, among other West African countries.')
 
+@handle_command.command(name="train",help="train the model")
+@click.option('modelBase',help='The model that you want to use example: openai/whisper-small ')
+@click.option('path2dataset',help='give the path to your json dataset')
+@click.option('outputDir',help="this is the path to directory where you save your model")
+@click.option('perDeviceTrainBatchSize',help="give your batch size")
+@click.option('lr',help="learning rate")
+def train(modelBase:str,path2dataset:str,outputDir:str,perDeviceTrainBatchSize:int,lr):
+    whisper_finetuner = WhisperFinetuner(model_base=modelBase,path2dataset=path2dataset)
+    whisper_finetuner.train_model(outputDir=outputDir,per_device_train_batch_size=perDeviceTrainBatchSize,lr=lr)
 if __name__ == "__main__":
     handle_command()

@@ -24,7 +24,7 @@ pip install -r requirements.txt
 
 ```bash 
 
-python3 main.py description
+python main.py train --modelBase <model_base> --path2dataset <path_to_dataset> --outputDir <output_directory> --perDeviceTrainBatchSize <batch_size> --lr <learning_rate>
 
 ```
 

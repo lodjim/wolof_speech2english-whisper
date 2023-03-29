@@ -6,7 +6,7 @@ from transformers import Seq2SeqTrainingArguments
 from transformers import Seq2SeqTrainer
 
 import evaluate
-from datasets import load_dataset
+from datasets import load_dataset,DatasetDict
 from dataclasses import dataclass
 from typing import Any, Dict, List, Union
 
@@ -42,7 +42,9 @@ class WhisperFinetuner:
     def __init__(self,model_base:str,path2dataset:str) -> None:
         self.feature_extractor = WhisperFeatureExtractor.from_pretrained(model_base)
         self.tokenizer = WhisperTokenizer.from_pretrained(model_base, language="english", task="transcribe")
-        self.dataset = load_dataset('json', data_files=path2datasets)
+        #self.dataset = load_dataset('json', data_files=path2dataset)
+        self.dataset = DatasetDict() 
+        self.dataset['train'] = load_dataset("mozilla-foundation/common_voice_11_0", "hi", split="test", use_auth_token=True)
         self.processor = WhisperProcessor.from_pretrained("openai/whisper-small", task="transcribe")
         self.metric = evaluate.load("wer")
         self.model = WhisperForConditionalGeneration.from_pretrained(model_base)

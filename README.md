@@ -32,3 +32,9 @@ python main.py train --modelBase <model_base> --path2dataset <path_to_dataset> -
 ## License
 
 This project is licensed under the [MIT License](https://github.com/lodjim/wolof_speech2english-whisper/blob/main/LICENSE).
+
+
+
+
+
+

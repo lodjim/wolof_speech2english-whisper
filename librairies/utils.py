@@ -42,9 +42,7 @@ class WhisperFinetuner:
     def __init__(self,model_base:str,path2dataset:str) -> None:
         self.feature_extractor = WhisperFeatureExtractor.from_pretrained("openai/"+model_base)
         self.tokenizer = WhisperTokenizer.from_pretrained("openai/"+model_base, language="english", task="transcribe")
-        #self.dataset = load_dataset('json', data_files=path2dataset)
-        self.dataset = DatasetDict() 
-        self.dataset['train'] = load_dataset("mozilla-foundation/common_voice_11_0", "hi", split="test")
+        self.dataset = load_dataset('json', data_files=path2dataset)
         self.processor = WhisperProcessor.from_pretrained("openai/whisper-small", task="transcribe")
         self.metric = evaluate.load("wer")
         self.model = WhisperForConditionalGeneration.from_pretrained("openai/"+model_base)
@@ -60,7 +58,7 @@ class WhisperFinetuner:
         return batch
     
     def train_model(self,output_dir:str,per_device_train_batch_size:int=16,lr:float=1e-5) -> None:
-        new_dataset = self.dataset.map(self.prepare_dataset, remove_columns=self.dataset.column_names["train"], num_proc=4)
+        new_dataset = self.dataset.map(self.prepare_dataset, remove_columns=self.dataset.column_names["train"], num_proc=1)
         data_collator = DataCollatorSpeechSeq2SeqWithPadding(processor=self.processor)
         training_args = Seq2SeqTrainingArguments(
             output_dir=output_dir,  # change to a repo name of your choice

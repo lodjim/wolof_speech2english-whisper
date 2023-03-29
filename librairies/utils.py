@@ -40,14 +40,14 @@ class DataCollatorSpeechSeq2SeqWithPadding:
 
 class WhisperFinetuner:
     def __init__(self,model_base:str,path2dataset:str) -> None:
-        self.feature_extractor = WhisperFeatureExtractor.from_pretrained(model_base)
-        self.tokenizer = WhisperTokenizer.from_pretrained(model_base, language="english", task="transcribe")
+        self.feature_extractor = WhisperFeatureExtractor.from_pretrained("openai/"+model_base)
+        self.tokenizer = WhisperTokenizer.from_pretrained("openai/"+model_base, language="english", task="transcribe")
         #self.dataset = load_dataset('json', data_files=path2dataset)
         self.dataset = DatasetDict() 
-        self.dataset['train'] = load_dataset("mozilla-foundation/common_voice_11_0", "hi", split="test", use_auth_token=True)
+        self.dataset['train'] = load_dataset("mozilla-foundation/common_voice_11_0", "hi", split="test")
         self.processor = WhisperProcessor.from_pretrained("openai/whisper-small", task="transcribe")
         self.metric = evaluate.load("wer")
-        self.model = WhisperForConditionalGeneration.from_pretrained(model_base)
+        self.model = WhisperForConditionalGeneration.from_pretrained("openai/"+model_base)
         self.model.config.forced_decoder_ids = None
         self.model.config.suppress_tokens = []
 

@@ -11,13 +11,13 @@ def description():
     print('The project "wolof_speech2english-whisper" is focused on developing a system that can transcribe Wolof speech into English text using a whisper model. Wolof is a language spoken in Senegal, Gambia, and Mauritania, among other West African countries.')
 
 @handle_command.command(name="train",help="train the model")
-@click.option('--modelBase',help='The model that you want to use example: openai/whisper-small ')
+@click.option('--model_base',help='The model that you want to use example: whisper-small')
 @click.option('--path2dataset',help='give the path to your json dataset')
-@click.option('--outputDir',help="this is the path to directory where you save your model")
-@click.option('--perDeviceTrainBatchSize',help="give your batch size")
+@click.option('--output_dir',help="this is the path to directory where you save your model")
+@click.option('--per_device_train_batch_size',help="give your batch size")
 @click.option('--lr',help="learning rate")
-def train(modelBase:str,path2dataset:str,outputDir:str,perDeviceTrainBatchSize:int,lr:float):
-    whisper_finetuner = WhisperFinetuner(model_base=modelBase,path2dataset=path2dataset)
-    whisper_finetuner.train_model(outputDir=outputDir,per_device_train_batch_size=perDeviceTrainBatchSize,lr=lr)
+def train(model_base,path2dataset,output_dir,per_device_train_batch_size,lr):
+    whisper_finetuner = WhisperFinetuner(model_base=model_base,path2dataset=path2dataset)
+    whisper_finetuner.train_model(output_dir=output_dir,per_device_train_batch_size=per_device_train_batch_size,lr=lr)
 if __name__ == "__main__":
     handle_command()
